@@ -23,7 +23,6 @@ para poblar los selects).
 ## Instalación
 
 ```bash
-cd inventory-frontend
 npm install
 ```
 
