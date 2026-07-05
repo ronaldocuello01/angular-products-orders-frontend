@@ -12,7 +12,7 @@ App Angular (standalone + Tailwind) para el flujo de **Órdenes de compra**,
   registrar movimientos de inventario, no hay pantalla de creación manual).
 
 No incluye todavía CRUD de Suppliers/Products (se consumen en modo lectura
-para poblar los selects); se puede agregar después si lo necesitas.
+para poblar los selects).
 
 ## Requisitos
 
