@@ -1,0 +1,47 @@
+<div class="min-h-screen flex flex-col">
+  <header class="bg-ink text-paper">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div>
+        <p class="font-mono text-[0.65rem] tracking-[0.2em] text-paper/50 uppercase">
+          Almacén / Panel de control
+        </p>
+        <h1 class="font-display text-xl font-semibold -mt-0.5">
+          Órdenes &amp; Inventario
+        </h1>
+      </div>
+
+      <nav class="flex items-center gap-1 border border-paper/15 rounded-lg p-1">
+        <a
+          routerLink="/orders"
+          routerLinkActive="bg-paper text-ink"
+          [routerLinkActiveOptions]="{ exact: false }"
+          class="px-4 py-1.5 rounded-md text-sm font-medium text-paper/80 hover:text-paper transition-colors"
+        >
+          Órdenes
+        </a>
+        <a
+          routerLink="/stock"
+          routerLinkActive="bg-paper text-ink"
+          class="px-4 py-1.5 rounded-md text-sm font-medium text-paper/80 hover:text-paper transition-colors"
+        >
+          Stock
+        </a>
+        <a
+          routerLink="/alerts"
+          routerLinkActive="bg-paper text-ink"
+          class="px-4 py-1.5 rounded-md text-sm font-medium text-paper/80 hover:text-paper transition-colors"
+        >
+          Alertas
+        </a>
+      </nav>
+    </div>
+    <!-- perforation strip, evokes a tear-off manifest sheet -->
+    <div class="border-t border-dashed border-paper/15"></div>
+  </header>
+
+  <main class="flex-1">
+    <div class="max-w-6xl mx-auto px-6 py-8">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

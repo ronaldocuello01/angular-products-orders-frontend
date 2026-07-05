@@ -1,0 +1,16 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { environment } from '../../../environments/environment';
+import { StockAlert } from '../models/alert.model';
+
+@Injectable({ providedIn: 'root' })
+export class AlertService {
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = `${environment.apiUrl}/alerts`;
+
+  findAll(): Observable<StockAlert[]> {
+    return this.http.get<StockAlert[]>(this.baseUrl);
+  }
+}

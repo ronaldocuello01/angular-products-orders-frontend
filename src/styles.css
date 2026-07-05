@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1, h2, h3 {
+    @apply font-display tracking-tight;
+  }
+  ::selection {
+    @apply bg-amber/30;
+  }
+}
+
+@layer components {
+  /*
+    Signature element: an inventory hang-tag.
+    A small die-cut "grommet" hole is punched with a box-shadow ring that
+    matches the surface it sits on, referencing physical stock tags used
+    to mark shelf status in a warehouse.
+  */
+  .tag {
+    @apply relative inline-flex items-center gap-1.5 font-mono text-[0.68rem]
+           uppercase tracking-wider font-medium pl-5 pr-3 py-1;
+    border-radius: 2px 8px 8px 2px;
+  }
+
+  .tag::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    transform: translateY(-50%);
+    background: currentColor;
+    opacity: 0.55;
+    box-shadow: 0 0 0 2px var(--tag-punch, #fbfaf6);
+  }
+
+  .tag-pending {
+    @apply tag bg-amber/15 text-amber;
+    --tag-punch: #fbfaf6;
+  }
+  .tag-approved {
+    @apply tag bg-slate/10 text-slate;
+    --tag-punch: #fbfaf6;
+  }
+  .tag-rejected {
+    @apply tag bg-brick/15 text-brick;
+    --tag-punch: #fbfaf6;
+  }
+  .tag-received {
+    @apply tag bg-teal/15 text-teal;
+    --tag-punch: #fbfaf6;
+  }
+  .tag-active {
+    @apply tag bg-brick/15 text-brick;
+    --tag-punch: #fbfaf6;
+  }
+  .tag-closed {
+    @apply tag bg-teal/15 text-teal;
+    --tag-punch: #fbfaf6;
+  }
+  .tag-low {
+    @apply tag bg-brick/15 text-brick;
+    --tag-punch: #fbfaf6;
+  }
+  .tag-ok {
+    @apply tag bg-teal/15 text-teal;
+    --tag-punch: #fbfaf6;
+  }
+
+  /* Perforation-style divider used between manifest rows instead of a hairline grid */
+  .stub-row {
+    @apply border-b border-dashed border-slate/25;
+  }
+
+  .card {
+    @apply bg-card rounded-xl border border-slate/15 shadow-sm;
+  }
+
+  .btn {
+    @apply inline-flex items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-medium
+           transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-ink text-paper hover:bg-ink/85;
+  }
+  .btn-teal {
+    @apply btn bg-teal text-white hover:bg-teal/85;
+  }
+  .btn-brick {
+    @apply btn bg-brick text-white hover:bg-brick/85;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-slate hover:bg-slate/10;
+  }
+
+  .field-label {
+    @apply block text-xs font-medium uppercase tracking-wide text-slate/80 mb-1;
+  }
+  .field-input {
+    @apply w-full rounded-md border border-slate/25 bg-card px-3 py-2 text-sm
+           focus:outline-none focus:ring-2 focus:ring-amber/40 focus:border-amber;
+  }
+}

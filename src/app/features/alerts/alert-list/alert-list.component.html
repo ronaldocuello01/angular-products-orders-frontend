@@ -1,0 +1,66 @@
+<div class="flex items-end justify-between mb-6">
+  <div>
+    <p class="font-mono text-[0.65rem] tracking-[0.2em] text-slate/60 uppercase">
+      Se abren y cierran automáticamente
+    </p>
+    <h2 class="text-2xl font-display font-semibold mt-0.5">Alertas de stock</h2>
+  </div>
+
+  <label class="flex items-center gap-2 text-sm text-slate/70 cursor-pointer">
+    <input type="checkbox" [(ngModel)]="onlyActive" class="accent-amber" />
+    Solo activas
+  </label>
+</div>
+
+@if (errorMessage) {
+  <div class="mb-5 card border-brick/30 bg-brick/5 px-4 py-3 text-sm text-brick">
+    {{ errorMessage }}
+  </div>
+}
+
+@if (loading) {
+  <div class="card px-6 py-10 text-center text-sm text-slate/60">Cargando alertas…</div>
+} @else if (visibleAlerts.length === 0) {
+  <div class="card px-6 py-10 text-center text-sm text-slate/70">
+    @if (onlyActive) {
+      No hay alertas activas en este momento.
+    } @else {
+      Todavía no se ha generado ninguna alerta.
+    }
+  </div>
+} @else {
+  <div class="card overflow-hidden">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="stub-row bg-ink/[0.03] text-left">
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Producto</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60 text-right">Stock al abrir</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Abierta</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Cerrada</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (alert of visibleAlerts; track alert.id) {
+          <tr class="stub-row last:border-b-0">
+            <td class="px-4 py-3.5 font-medium">{{ productName(alert.productId) }}</td>
+            <td class="px-4 py-3.5 font-mono text-right">{{ alert.quantity }}</td>
+            <td class="px-4 py-3.5 font-mono text-xs text-slate/60">
+              {{ alert.createdAt | date: 'd MMM, HH:mm' }}
+            </td>
+            <td class="px-4 py-3.5 font-mono text-xs text-slate/60">
+              {{ alert.closedAt ? (alert.closedAt | date: 'd MMM, HH:mm') : '—' }}
+            </td>
+            <td class="px-4 py-3.5">
+              @if (alert.status === AlertStatus.ACTIVE) {
+                <span class="tag-active">Activa</span>
+              } @else {
+                <span class="tag-closed">Cerrada</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

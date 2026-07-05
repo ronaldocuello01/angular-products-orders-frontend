@@ -1,0 +1,83 @@
+<div class="mb-6">
+  <a routerLink="/orders" class="text-xs font-mono text-slate/60 hover:text-ink">
+    ← volver a órdenes
+  </a>
+  <h2 class="text-2xl font-display font-semibold mt-2">Nueva orden de compra</h2>
+  <p class="text-sm text-slate/60 mt-1">
+    Selecciona el proveedor y los productos a pedir. Al recibirla se generará
+    un movimiento de inventario por cada línea.
+  </p>
+</div>
+
+@if (errorMessage) {
+  <div class="mb-5 card border-brick/30 bg-brick/5 px-4 py-3 text-sm text-brick">
+    {{ errorMessage }}
+  </div>
+}
+
+@if (loading) {
+  <div class="card px-6 py-10 text-center text-sm text-slate/60">Cargando…</div>
+} @else {
+  <form [formGroup]="form" (ngSubmit)="submit()" class="card p-6 space-y-6 max-w-2xl">
+    <div>
+      <label class="field-label" for="supplierId">Proveedor</label>
+      <select id="supplierId" formControlName="supplierId" class="field-input">
+        <option value="" disabled>Selecciona un proveedor</option>
+        @for (supplier of suppliers; track supplier.id) {
+          <option [value]="supplier.id">{{ supplier.name }}</option>
+        }
+      </select>
+      @if (form.controls.supplierId.touched && form.controls.supplierId.invalid) {
+        <p class="mt-1 text-xs text-brick">El proveedor es obligatorio.</p>
+      }
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="field-label !mb-0">Productos</span>
+        <button type="button" class="btn-ghost text-xs" (click)="addItem()">
+          + Agregar línea
+        </button>
+      </div>
+
+      <div formArrayName="items" class="space-y-3">
+        @for (item of items.controls; track item; let i = $index) {
+          <div [formGroupName]="i" class="flex items-start gap-3 stub-row pb-3">
+            <div class="flex-1">
+              <select formControlName="productId" class="field-input">
+                <option value="" disabled>Selecciona un producto</option>
+                @for (product of products; track product.id) {
+                  <option [value]="product.id">{{ product.name }} · {{ product.sku }}</option>
+                }
+              </select>
+            </div>
+            <div class="w-28">
+              <input
+                type="number"
+                min="1"
+                formControlName="quantity"
+                class="field-input font-mono"
+                placeholder="Cant."
+              />
+            </div>
+            <button
+              type="button"
+              class="btn-ghost text-xs mt-1.5"
+              [disabled]="items.length === 1"
+              (click)="removeItem(i)"
+            >
+              Quitar
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 pt-2">
+      <button type="submit" class="btn-primary" [disabled]="submitting">
+        {{ submitting ? 'Creando…' : 'Crear orden' }}
+      </button>
+      <a routerLink="/orders" class="btn-ghost">Cancelar</a>
+    </div>
+  </form>
+}

@@ -1,0 +1,103 @@
+<div class="flex items-end justify-between mb-6">
+  <div>
+    <p class="font-mono text-[0.65rem] tracking-[0.2em] text-slate/60 uppercase">
+      Manifiesto de compras
+    </p>
+    <h2 class="text-2xl font-display font-semibold mt-0.5">Órdenes</h2>
+  </div>
+  <a routerLink="/orders/new" class="btn-primary">
+    + Nueva orden
+  </a>
+</div>
+
+@if (errorMessage) {
+  <div class="mb-5 card border-brick/30 bg-brick/5 px-4 py-3 text-sm text-brick">
+    {{ errorMessage }}
+  </div>
+}
+
+@if (loading) {
+  <div class="card px-6 py-10 text-center text-sm text-slate/60">
+    Cargando órdenes…
+  </div>
+} @else if (orders.length === 0) {
+  <div class="card px-6 py-10 text-center">
+    <p class="text-sm text-slate/70">Todavía no hay ninguna orden registrada.</p>
+    <a routerLink="/orders/new" class="btn-primary mt-4">Crear la primera orden</a>
+  </div>
+} @else {
+  <div class="card overflow-hidden">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="stub-row bg-ink/[0.03] text-left">
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Orden</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Proveedor</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Items</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Creada</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Estado</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60 text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders; track order.id) {
+          <tr class="stub-row last:border-b-0 align-top">
+            <td class="px-4 py-3.5 font-mono text-xs text-slate/70">
+              {{ order.id.slice(0, 8) }}
+            </td>
+            <td class="px-4 py-3.5">
+              {{ supplierName(order.supplierId) }}
+            </td>
+            <td class="px-4 py-3.5">
+              <ul class="space-y-0.5">
+                @for (item of order.items; track item.productId) {
+                  <li class="text-slate/80">
+                    <span class="font-mono text-xs text-ink">{{ item.quantity }}×</span>
+                    {{ productName(item.productId) }}
+                  </li>
+                }
+              </ul>
+            </td>
+            <td class="px-4 py-3.5 font-mono text-xs text-slate/60">
+              {{ order.createdAt | date: 'd MMM, HH:mm' }}
+            </td>
+            <td class="px-4 py-3.5">
+              <span [class]="tagClass(order.status)">{{ statusLabel(order.status) }}</span>
+            </td>
+            <td class="px-4 py-3.5 text-right">
+              <div class="flex justify-end gap-2">
+                @if (order.status === OrderStatus.PENDING) {
+                  <button
+                    class="btn-teal"
+                    [disabled]="pendingActionId === order.id"
+                    (click)="approve(order)"
+                  >
+                    Aprobar
+                  </button>
+                  <button
+                    class="btn-brick"
+                    [disabled]="pendingActionId === order.id"
+                    (click)="reject(order)"
+                  >
+                    Rechazar
+                  </button>
+                }
+                @if (order.status === OrderStatus.APPROVED) {
+                  <button
+                    class="btn-teal"
+                    [disabled]="pendingActionId === order.id"
+                    (click)="receive(order)"
+                  >
+                    Recibir
+                  </button>
+                }
+                @if (order.status === OrderStatus.REJECTED || order.status === OrderStatus.RECEIVED) {
+                  <span class="text-xs text-slate/40 self-center">Sin acciones</span>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

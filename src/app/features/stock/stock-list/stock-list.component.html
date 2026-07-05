@@ -1,0 +1,53 @@
+<div class="mb-6">
+  <p class="font-mono text-[0.65rem] tracking-[0.2em] text-slate/60 uppercase">
+    Existencias por producto
+  </p>
+  <h2 class="text-2xl font-display font-semibold mt-0.5">Stock</h2>
+</div>
+
+@if (errorMessage) {
+  <div class="mb-5 card border-brick/30 bg-brick/5 px-4 py-3 text-sm text-brick">
+    {{ errorMessage }}
+  </div>
+}
+
+@if (loading) {
+  <div class="card px-6 py-10 text-center text-sm text-slate/60">Cargando stock…</div>
+} @else if (products.length === 0) {
+  <div class="card px-6 py-10 text-center text-sm text-slate/70">
+    Todavía no hay productos registrados.
+  </div>
+} @else {
+  <div class="card overflow-hidden">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="stub-row bg-ink/[0.03] text-left">
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Producto</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">SKU</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Proveedor</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60 text-right">Mínimo</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60 text-right">Actual</th>
+          <th class="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-wider text-slate/60">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products; track product.id) {
+          <tr class="stub-row last:border-b-0">
+            <td class="px-4 py-3.5 font-medium">{{ product.name }}</td>
+            <td class="px-4 py-3.5 font-mono text-xs text-slate/70">{{ product.sku }}</td>
+            <td class="px-4 py-3.5 text-slate/80">{{ supplierName(product.supplierId) }}</td>
+            <td class="px-4 py-3.5 font-mono text-right text-slate/70">{{ product.minimumStock }}</td>
+            <td class="px-4 py-3.5 font-mono text-right font-medium">{{ product.currentStock }}</td>
+            <td class="px-4 py-3.5">
+              @if (isLow(product)) {
+                <span class="tag-low">Bajo mínimo</span>
+              } @else {
+                <span class="tag-ok">Saludable</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
